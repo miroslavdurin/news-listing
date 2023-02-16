@@ -1,0 +1,124 @@
+@use "../../sass/abstracts/variables" as *;
+
+.article {
+    background: #FFFFFF;
+    box-shadow: 0px 1px 2px -1px #C8CAD1;
+    border-radius: 8px;
+    overflow: hidden;
+    max-height: 25rem;
+
+    &--no-shadow {
+        box-shadow: none;
+    }
+
+    &__breaking {
+        padding: 2.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: $color-grey-dark;
+        height: 100%;
+        text-align: center;
+
+        .heading--h2 {
+            margin-bottom: 0.8rem;
+        }
+
+        .heading--h5 {
+            color: #fff;
+            font-weight: 400;
+        }
+
+        .heading--h6 {
+            color: #fff;            
+            background-color: $color-red;
+            padding: 1px 10px;
+            margin-bottom: 0.4rem;
+        }
+    }
+
+    &__top {
+        height: 87%;
+        cursor: pointer;
+        position: relative;
+    }
+
+    &__ad {
+        position: absolute;
+        z-index: 100;
+        font-size: 1.0rem;
+        line-height: 1.6rem;
+        letter-spacing: -0.0153846px;
+        text-transform: uppercase;
+        border-radius: 4px;
+        color: #fff;
+        background-color: $color-red;
+        padding: 4px 6px;
+        top: 1.5rem;
+        left: 1.5rem;
+    }
+
+    &__bottom {
+        display: flex;
+        justify-content: space-between;   
+        align-items: center;           
+        padding: 0 1.2rem 1.6rem;
+    }
+
+    &__img-wrapper {
+        height: 60%;
+        overflow: hidden;
+    }
+
+    &__img {
+        display: block;
+        width: 100%;
+        object-fit: cover;
+        transition: scale 0.5s ease;
+    }
+
+    &__content {        
+        padding: 1.2rem;
+        padding-bottom: 1rem;
+        height: 45%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    &:hover &__img {
+        scale: 1.02;
+    }
+
+    &__bookmark-btn {
+        background-color: transparent;
+        border: none;
+        outline: none;
+        width: 2rem;
+        height: 2rem;
+        cursor: pointer;
+        transform: translate(-5px, -3px);     
+
+        svg {
+            stroke-width: 2px;
+            stroke: $color-grey-dark;
+            fill: transparent;    
+            width: 2.2rem;        
+            height: 2.2rem;        
+            use {
+                translate: 3px 4px;
+            }
+        }
+
+        &--bookmarked {
+            svg {
+                fill: $color-grey-dark;
+            }
+        }
+
+        &:hover svg{    
+            fill: $color-grey-dark;          
+        }
+    }
+}

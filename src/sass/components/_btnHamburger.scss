@@ -1,0 +1,61 @@
+@use "../abstracts/variables" as *;
+
+.btn-hamburger {
+    width: 2.4rem;
+    height: 2.4rem;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    position: absolute;
+    z-index: 20;
+    top: 0;
+    right: 2.5rem;
+
+    span {
+        display: block;
+        margin: auto 0;
+        width: 2.4rem;
+        height: 0.4rem;
+        background-color: $color-grey-dark;
+        position: relative;
+        border-radius: 10px;            
+        transition: background-color 0.2s ease 0.1s;
+
+        &::before,
+        &::after {
+            content: '';
+            display: block;
+            width: 2.4rem;
+            height: 0.4rem;
+            background-color: $color-grey-dark;
+            position: absolute;
+            border-radius: inherit;
+            transition: rotate 0.3s ease;
+        }
+
+        &::before {
+            top: -7px;
+        }
+
+        &::after {
+            bottom: -7px;
+        }
+    }
+    
+    &--active {
+        span {
+            background-color: transparent;
+            transition: background-color 0.2s ease;
+
+            &::before {
+                rotate: 225deg;
+                translate: 0 7px;
+            }
+
+            &::after {
+                rotate: -225deg;
+                translate: 0 -7px;
+            }
+        }            
+    }
+}

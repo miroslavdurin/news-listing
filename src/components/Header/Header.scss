@@ -1,0 +1,39 @@
+@use "../../sass/abstracts/variables" as *;
+
+.header {
+    margin-top: 3.5rem;
+    margin-bottom: 2.4rem;
+    padding-bottom: 2.8rem;
+    border-bottom: 1px solid $color-border;
+    display: flex;
+    align-items: center;
+    gap: 4.3rem;
+
+    @media only screen and (max-width: 40em) {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2rem;
+    }
+
+    &__logo {
+        display: block;
+        &--my {
+            color: $color-red;
+        }
+
+        .heading--h1 {
+            @media only screen and (max-width: 40em) {           
+                font-size: 2.4rem;
+                line-height: 2.9rem;            
+            }
+        }
+    }
+
+    &__mobile {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    
+}

@@ -1,0 +1,26 @@
+@use "../../sass/abstracts/variables" as *;
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    width: 100vw;
+    background-color: $color-white;
+
+    &__logo-box {
+        margin: 11rem 0 6.4rem;
+        text-align: center;
+    }
+    &__logo {
+        display: block;
+        &--my {
+            color: $color-red;
+        }
+    }
+    .container {
+        .form {
+            margin-bottom: 3.6rem;
+        }
+    }
+}

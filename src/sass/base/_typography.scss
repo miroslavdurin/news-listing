@@ -1,0 +1,58 @@
+@use "../abstracts/variables" as *;
+
+body {
+	font-family: "Inter", sans-serif;
+    font-style: normal;
+	font-weight: 500;
+	line-height: 2.5rem;	
+	color: $color-black;
+    background-color: $color-white;
+}
+
+.heading {
+    &--h1 {      
+        font-weight: 900;
+        font-size: 3.2rem;
+        line-height: 3.9rem;  
+    }
+    
+    &--h2 {
+        font-weight: 800;
+        font-size: 2.5rem;
+        line-height: 2.9rem;
+        letter-spacing: -0.19px;
+        color: $color-white;
+    }
+
+    &--h3 {
+        font-weight: 600;
+        font-size: 1.8rem;
+        line-height: 2.4rem;
+        letter-spacing: -0.153px;
+        color: $color-grey-dark;
+    }
+
+    &--h4 {
+        font-weight: 600;
+        font-size: 1.6rem;
+        line-height: 2.0rem;
+        letter-spacing: -0.11px;
+        color: $color-black;
+    }
+
+    &--h5 {
+        font-weight: 400;
+        font-size: 1.2rem;
+        line-height: 1.4rem;
+        letter-spacing: -0.0675px;
+        color: $color-grey-dark;
+    }
+
+    &--h6 {
+        font-size: 1.0rem;
+        line-height: 1.6rem;
+        letter-spacing: -0.0153846px;
+        text-transform: uppercase;
+        color: $color-blue;
+    }
+}

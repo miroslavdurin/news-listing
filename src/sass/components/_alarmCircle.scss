@@ -1,0 +1,49 @@
+@use "../abstracts/variables" as *;
+
+.alarm-circle {
+    position: relative;
+    width: 2rem;
+    height: 2rem;
+
+    &::before,
+    &::after {
+        content: "";
+        display: block;
+        position: absolute;
+        background-color: $color-red;
+        border-radius: 50rem;
+    }
+
+    &::before {        
+        width: 1rem;
+        height: 1rem;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 2;
+    }
+
+    &::after {
+        width: 2rem;
+        height: 2rem;
+        opacity: 0.24;
+        top: 0;
+        left: 0;
+        z-index: 1;
+        scale: 0;
+        animation: animate 2s infinite;
+        animation-delay: 3.5s;
+    }
+}
+
+@keyframes animate {
+    from {
+        scale: 0;
+        opacity: 0.3;
+    }
+
+    to {
+        scale: 1.7;
+        opacity: 0;
+    }
+}

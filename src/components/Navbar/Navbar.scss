@@ -1,0 +1,103 @@
+@use "../../sass/abstracts/variables" as *;
+
+.nav {
+    width: 6.3rem;
+
+    &__list {
+        font-size: 1.0rem;
+        line-height: 1.4rem;
+        text-align: center;
+        letter-spacing: 0.1px;
+        color: $color-grey-dark;
+    }
+
+    &__item {        
+        width: 6.3rem;
+        height: 6.3rem;
+
+        &:hover .nav__btn{
+            opacity: 1;
+            font-size: bold;
+        }
+    }
+
+    &__btn {
+        font-family: "Inter", sans-serif;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 4px;
+        height: 100%;
+        width: 100%;        
+        opacity: 0.5;
+        transition: all 0.2s ease;
+        background: none;
+        outline: none;
+        border: none;
+        cursor: pointer;
+
+        svg {
+            display: block;
+            width: 2rem;
+            height: 2rem;
+            fill: $color-grey-dark;
+        }        
+
+        &--active {
+            opacity: 1;
+            color: $color-red;
+
+            svg {
+                fill: $color-red;
+            }
+        }
+    }
+
+    &--small-screen {
+        width: 100%;
+
+        .nav {            
+            &__list {
+                display: grid;
+                grid-template-columns: repeat(4, 9.5rem);
+                grid-template-rows: repeat(4, 9.5rem);
+                justify-content: space-between;
+                justify-items: center;
+                align-items: center;
+
+                font-size: 1.4rem;
+                line-height: 2rem;
+                letter-spacing: 0.14px;
+
+                @media only screen and (max-width: 30em) {
+                    grid-template-columns: repeat(3, 9.5rem);
+                    grid-template-rows: repeat(3, 9.5rem);
+                }
+
+                @media only screen and (max-width: 20em) {
+                    grid-template-columns: repeat(2, 9.5rem);
+                    grid-template-rows: repeat(2, 9.5rem);
+                }
+            }
+
+            &__item {
+                width: 100%;
+                height: 100%;
+            }
+
+            &__btn {
+                svg {
+                    width: 2.4rem;
+                    height: 2.4rem; 
+                }                
+            }
+
+            &__btn--active {
+                box-shadow: 0px 6px 36px rgba(0, 0, 0, 0.16);
+                border-radius: 5px;
+            }
+
+        }
+    }
+}
