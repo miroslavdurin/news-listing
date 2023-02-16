@@ -28,3 +28,10 @@ This is a task given by Profico company for a frontend developer role.
 
 - Adding loading spinner and error messages.
 
+- Getting rid of API call when new bookmark is added. In this version adding bookmark triggers useEffect hook, which makes a new API call that isn't necessary.
+
+- Using React Router instead of app state.
+
+- Adding animations on Route changes.
+
+- Making a version with Material UI library and TypeScript.
