@@ -5,6 +5,7 @@ import Navbar from '../Navbar/Navbar';
 
 function PhoneModal({isSmallScreen, handleCategories, handleQuery, category}) {
     function handleSubmit(e) {
+        /* Reading input and calling handleQuery function. */
         e.preventDefault();
         const input = document.querySelector("#input");
         if(!input.value) return;

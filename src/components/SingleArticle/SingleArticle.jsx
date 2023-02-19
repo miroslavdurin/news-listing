@@ -17,7 +17,8 @@ function SingleArticle({url, image, title, category, author, isBookmarked, isAd,
   }
 
   function handleOpenLink() {
-    !isAd &&window.open(url)
+    /* Opening link on a new page if it isn't ad. */
+    !isAd && window.open(url)
   }
 
   return (    

@@ -12,7 +12,6 @@ import { API_KEY } from './utilities/constants';
 import { getArticles, insertAdsAndBreakingNews} from './utilities/helpers';
 
 
-
 function App() {
   const [isFeatured, setIsFeatured] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -22,20 +21,24 @@ function App() {
   const isBigScreen =  !useMediaQuery('(max-width: 40em)');
 
   const searchedArticles = useRef([]);
+
+  /* Variable used to track previous category, to prevent unnecessary api calls. */
+  /* Alternative would be to use useDefferedValue hook. */
   const prevCategory = useRef();
 
   const [bookmarks, setBookmarks] = useState(()=>{
+    /* Checking if local storage exists and putting bookmarks in state. */
     const storage = localStorage.getItem("bookmarks");
     if(!storage) return []
     else return JSON.parse(storage)
   });
     
   async function handleQuery(query) {
-    
     const fetchedArticles = await getArticles(API_KEY, "searched", true, query);
 
+    /* Checking for bookmarked articles. */
     fetchedArticles.forEach(article=>{
-      article.isBookmarked = bookmarks.some(bookmark=> bookmark.url === article.url)
+      article.isBookmarked = bookmarks.some(bookmark=> bookmark.url === article.url)      
     })
 
     searchedArticles.current = [...fetchedArticles];
@@ -53,6 +56,7 @@ function App() {
   }
 
   function handleClick(e) {
+    /* Function used on small screen to select featured and latest news. */
     const btn = e.target.closest(".main__btn")
     if(!btn) return;
 
@@ -73,18 +77,20 @@ function App() {
     })
 
     if(!bookmarkArticle.isBookmarked) {
+      /* Removing article from bookmarks and updating local storage. */
       const filteredBookmarks = bookmarks.filter(bookmark=> bookmark.url !== bookmarkArticle.url)
       setBookmarks([...filteredBookmarks]);
 
+      /* Updating local storage. */
       localStorage.clear();
       localStorage.setItem("bookmarks", JSON.stringify(filteredBookmarks))
       
       return;
     }
-    localStorage.setItem("bookmarks", JSON.stringify([...bookmarks, bookmarkArticle]))
-    
-    setBookmarks([...bookmarks, bookmarkArticle]);        
-    
+
+    /* Adding article to bookmarks array and updating local storage. */
+    setBookmarks([...bookmarks, bookmarkArticle]);      
+    localStorage.setItem("bookmarks", JSON.stringify([...bookmarks, bookmarkArticle]))    
   }
 
   function handleDisplayBanner(){
@@ -92,14 +98,17 @@ function App() {
   }
 
   useEffect(()=>{   
+    /* Closing modal window, it would stay open after selecting a new category. */
     setIsModalOpen(false)
 
     async function controlArticles(c) {
+      /* Tracking previous category. */
       prevCategory.current = category;
       
       const fetchedArticles = await getArticles(API_KEY, c, false, "");
       fetchedArticles.forEach(article=>{
-        article.isBookmarked = bookmarks.some(bookmark=> bookmark.url === article.url)
+        article.isBookmarked = bookmarks.some(bookmark=> bookmark.url === article.url);
+        article.category = category;
       })
 
       const articlesWithAds = insertAdsAndBreakingNews(fetchedArticles)
@@ -107,21 +116,28 @@ function App() {
     }
 
     if(category === "bookmarks") {
-        setArticles([...bookmarks])        
+        setArticles([...bookmarks])    
+        /* Tracking previous category. */
         prevCategory.current = "bookmarks";
         return;
     }
 
     if(category === "search") {
       setArticles([...searchedArticles.current])      
+      /* Tracking previous category. */
       prevCategory.current = "search";
       return;
     }
 
     if(prevCategory.current === category) {     
-      setArticles(prevState=> {
-
-        const updatedArticles = [...prevState];
+      /* Preventing a new async call when only bookmarks had changed. */
+      setArticles(curState=> {
+        /* Using callback version because we need current state. */
+        /* If we would use articles array then ES Lint would ask to put articles in dependancy array. */
+        /* Putting articles in dependancy array would cause an infinite loop,  */
+        /* due to the fact that React creates new array on each render. */
+        const updatedArticles = [...curState];
+        /* Checking for bookmarked articles */
         updatedArticles.forEach(article => {article.isBookmarked = bookmarks.some(bookmark=> bookmark.url === article.url)})
       
         return updatedArticles
@@ -140,7 +156,7 @@ function App() {
       <Header handleQuery={handleQuery} />
       <div className='main-panel container'>
         {isBigScreen && <Navbar handleCategories={handleCategories} category={category} />}
-        <main className={`main ${isModalOpen && !isBigScreen && 'hidden'}`}>
+        <main className={`main ${isModalOpen && !isBigScreen && 'hidden'}`}>          
           {isBigScreen && <h3 className='heading--h3'>News</h3>}
 
           {         

@@ -14,9 +14,10 @@ import iconSearch from "../../assets/icons/icon-search.svg";
 
 function Navbar({isSmallScreen, handleCategories, category}) {
     function handleClick(e) {
+        /* Selecting list item and reading data value to read category. */
         const listItem = e.target.closest(".nav__item");
         if(!listItem) return;
-        const {value} = listItem.dataset
+        const {value} = listItem.dataset;
 
         handleCategories(value)
     }

@@ -82,6 +82,7 @@ export function insertAdsAndBreakingNews(articles) {
     newArticles.splice(((i * 5)+7), 0, ad)
   })
 
+  /* Breaking news article. */
   newArticles.splice(3, 0, {
     isBreakingNews: true,
     title: "Peace On Earth A Wonderful Wish But No Way",
