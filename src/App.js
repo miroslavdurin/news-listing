@@ -22,6 +22,7 @@ function App() {
   const isBigScreen =  !useMediaQuery('(max-width: 40em)');
 
   const searchedArticles = useRef([]);
+  const prevCategory = useRef();
 
   const [bookmarks, setBookmarks] = useState(()=>{
     const storage = localStorage.getItem("bookmarks");
@@ -83,6 +84,7 @@ function App() {
     localStorage.setItem("bookmarks", JSON.stringify([...bookmarks, bookmarkArticle]))
     
     setBookmarks([...bookmarks, bookmarkArticle]);        
+    
   }
 
   function handleDisplayBanner(){
@@ -93,9 +95,9 @@ function App() {
     setIsModalOpen(false)
 
     async function controlArticles(c) {
+      prevCategory.current = category;
       
       const fetchedArticles = await getArticles(API_KEY, c, false, "");
-      console.log("first")
       fetchedArticles.forEach(article=>{
         article.isBookmarked = bookmarks.some(bookmark=> bookmark.url === article.url)
       })
@@ -105,14 +107,27 @@ function App() {
     }
 
     if(category === "bookmarks") {
-        setArticles([...bookmarks])
+        setArticles([...bookmarks])        
+        prevCategory.current = "bookmarks";
         return;
     }
 
     if(category === "search") {
-      setArticles([...searchedArticles.current])
+      setArticles([...searchedArticles.current])      
+      prevCategory.current = "search";
       return;
     }
+
+    if(prevCategory.current === category) {     
+      setArticles(prevState=> {
+
+        const updatedArticles = [...prevState];
+        updatedArticles.forEach(article => {article.isBookmarked = bookmarks.some(bookmark=> bookmark.url === article.url)})
+      
+        return updatedArticles
+      })   
+      return
+    };
 
     controlArticles(category);
   }, [category, bookmarks]) 

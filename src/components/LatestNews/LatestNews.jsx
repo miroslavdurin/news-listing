@@ -5,11 +5,10 @@ import './LatestNews.scss';
 import iconChevronRight from '../../assets/icons/icon-chevron-right.svg';
 import { API_KEY } from '../../utilities/constants';
 
-import articlesJson from '../../articles.json';
 import axios from 'axios';
 
 function LatestNews() {
-    const [items, setItems] = useState([...articlesJson]);
+    const [items, setItems] = useState([]);
     const [ref, inView] = useInView();
     const page = useRef(1);
     const maxPages = useRef(1)
@@ -31,7 +30,7 @@ function LatestNews() {
                 if(!inView) return;
                 
                 const res = await axios({url: `https://newsapi.org/v2/top-headlines?country=us&pageSize=10&page=${page.current}&apiKey=${API_KEY}`, method:"GET"});
-                console.log(res)
+                
                 setItems(prev => [...prev, ...res.data.articles])
                 
                 page.current = page.current + 1
@@ -54,8 +53,10 @@ function LatestNews() {
                 <ul className="latest__list">                  
                         
                         {items.map((article, i, array)=>{
-                                const date = new Date("2023-02-14T07:36:05Z");
-                                const time = `${date.getHours()}:${date.getMinutes()}`
+                                const date = new Date(article.publishedAt);
+                                const hours = +date.getHours();
+                                const minutes = +date.getMinutes();
+                                const time = `${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}`                                
 
                                 return (
                                     i === array.length - 1 ?
