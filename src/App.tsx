@@ -8,33 +8,32 @@ import Navbar from './components/Navbar/Navbar';
 import SingleArticle from './components/SingleArticle/SingleArticle';
 import LatestNews from './components/LatestNews/LatestNews';
 import PhoneModal from './components/PhoneModal/PhoneModal';
-import { API_KEY } from './utilities/constants';
 import { getArticles, insertAdsAndBreakingNews} from './utilities/helpers';
-
+import { Article, Categories } from './utilities/types';
 
 function App() {
   const [isFeatured, setIsFeatured] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [articles, setArticles] = useState([]);
-  const [category, setCategory] = useState("entertainment");
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [category, setCategory] = useState<Categories>("entertainment");
   const [displayBanner, setDisplayBanner] = useState(true);
   const isBigScreen =  !useMediaQuery('(max-width: 40em)');
 
-  const searchedArticles = useRef([]);
+  const searchedArticles: React.MutableRefObject<Article[]> = useRef([]);
 
   /* Variable used to track previous category, to prevent unnecessary api calls. */
   /* Alternative would be to use useDefferedValue hook. */
-  const prevCategory = useRef();
+  const prevCategory: React.MutableRefObject<Categories | null>  = useRef(null);
 
-  const [bookmarks, setBookmarks] = useState(()=>{
+  const [bookmarks, setBookmarks] = useState<Article[]>(()=>{
     /* Checking if local storage exists and putting bookmarks in state. */
     const storage = localStorage.getItem("bookmarks");
     if(!storage) return []
     else return JSON.parse(storage)
   });
     
-  async function handleQuery(query) {
-    const fetchedArticles = await getArticles(API_KEY, "searched", true, query);
+  async function handleQuery(query: string) {
+    const fetchedArticles: Article[] = await getArticles(process.env.REACT_APP_API_KEY, "search", true, query);
 
     /* Checking for bookmarked articles. */
     fetchedArticles.forEach(article=>{
@@ -55,9 +54,10 @@ function App() {
     if(!isBigScreen) setIsModalOpen(prev=>!prev)
   }
 
-  function handleClick(e) {
+  function handleClick(e: React.MouseEvent) {
     /* Function used on small screen to select featured and latest news. */
-    const btn = e.target.closest(".main__btn")
+    const target = e.target as HTMLElement;
+    const btn = target.closest(".main__btn") as HTMLElement;
     if(!btn) return;
 
     if((isFeatured && btn.dataset.value === "featured") || (!isFeatured && btn.dataset.value === "latest")) return;
@@ -65,13 +65,13 @@ function App() {
     if(isFeatured && btn.dataset.value === "latest") setIsFeatured(false)
   }
 
-  function handleCategories(newCategory) {
+  function handleCategories(newCategory: Categories) {
     if(newCategory === category) return;
     if(!isBigScreen) setIsFeatured(true)
     setCategory(newCategory)
   }
 
-  function handleBookmarks(bookmarkArticle){
+  function handleBookmarks(bookmarkArticle: Article){
     searchedArticles.current.forEach(article=> {
       if(article.url === bookmarkArticle.url) article.isBookmarked = bookmarkArticle.isBookmarked
     })
@@ -101,11 +101,11 @@ function App() {
     /* Closing modal window, it would stay open after selecting a new category. */
     setIsModalOpen(false)
 
-    async function controlArticles(c) {
+    async function controlArticles(c: Categories) {
       /* Tracking previous category. */
       prevCategory.current = category;
       
-      const fetchedArticles = await getArticles(API_KEY, c, false, "");
+      const fetchedArticles:Article[] = await getArticles(process.env.REACT_APP_API_KEY, c, false, "");
       fetchedArticles.forEach(article=>{
         article.isBookmarked = bookmarks.some(bookmark=> bookmark.url === article.url);
         article.category = category;

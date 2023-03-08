@@ -9,17 +9,24 @@ import iconSports from "../../assets/icons/icon-sports.svg";
 import iconTechnology from "../../assets/icons/icon-technology.svg";
 import iconBookmark from "../../assets/icons/icon-bookmark.svg";
 import iconSearch from "../../assets/icons/icon-search.svg";
+import { Categories } from '../../utilities/types';
 
+type NavbarProps = {
+    isSmallScreen?: boolean;
+    handleCategories: (category: Categories) => void;
+    category: Categories;
+}
 
-
-function Navbar({isSmallScreen, handleCategories, category}) {
-    function handleClick(e) {
+function Navbar({isSmallScreen, handleCategories, category}: NavbarProps) {
+    function handleClick(e: React.MouseEvent<HTMLUListElement>) {
         /* Selecting list item and reading data value to read category. */
-        const listItem = e.target.closest(".nav__item");
-        if(!listItem) return;
-        const {value} = listItem.dataset;
+        const listItem = e.target as HTMLElement;
 
-        handleCategories(value)
+        if(listItem){
+            const targetItem = listItem.closest(".nav__item")! as HTMLElement;
+            const value = targetItem.dataset.value as Categories;
+            handleCategories(value);        
+        }       
     }
 
     return (
