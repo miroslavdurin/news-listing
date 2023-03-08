@@ -3,45 +3,41 @@ import { useState, useEffect, useRef } from 'react';
 import { useInView } from 'react-intersection-observer';
 import './LatestNews.scss';
 import iconChevronRight from '../../assets/icons/icon-chevron-right.svg';
-import { API_KEY } from '../../utilities/constants';
 
 import axios from 'axios';
 
+interface Article {
+    title: string;
+    publishedAt: Date;
+    url: string;
+}
+
 function LatestNews() {
-    const [items, setItems] = useState([]);
+    const [items, setItems] = useState<Article[]>([]);
     const [ref, inView] = useInView();
     const page = useRef(1);
-    const maxPages = useRef(1)
+    const maxPages = useRef(1);
+
 
     useEffect(()=>{
-        async function getData() {                           
+        async function getData(isFirstPage: boolean) {                           
             
             try {    
-                if(page.current > maxPages.current) return
-            
-                if(!inView && page.current === 1) {                    
-                    const res = await axios({url: `https://newsapi.org/v2/top-headlines?country=us&pageSize=10&apiKey=${API_KEY}`, method:"GET"});
-                    setItems([...res.data.articles])
-                    page.current = 2   
-                    maxPages.current = res.data.totalResults % 10;   
-                    return
-                }      
-                
-                if(!inView) return;
-                
-                const res = await axios({url: `https://newsapi.org/v2/top-headlines?country=us&pageSize=10&page=${page.current}&apiKey=${API_KEY}`, method:"GET"});
-                
-                setItems(prev => [...prev, ...res.data.articles])
-                
-                page.current = page.current + 1
-
+                if(page.current > maxPages.current) return    
+                console.log("call")                                
+                    const res = await axios({url: `https://newsapi.org/v2/top-headlines?country=us&pageSize=10&page=${page.current}&apiKey=${process.env.REACT_APP_API_KEY}`, method:"GET"});
+                    isFirstPage ? setItems([...res.data.articles]) : setItems(prev => [...prev, ...res.data.articles])
+                    page.current = page.current + 1;   
+                    maxPages.current = res.data.totalResults % 10; 
             }catch(err){
                 console.log(err)
             }
-        }                      
-        getData()
+        }              
 
-      }, [inView])           
+        page.current === 1 && getData(true)
+        if(inView) getData(false)
+   
+      }, [inView])                   
        
     return (
         <div className='latest'>
@@ -82,7 +78,7 @@ function LatestNews() {
             </div>
             <a href="/" className="latest__see-all-news">
                 <span>See all news</span>  
-                <img src={iconChevronRight} alt="" />
+                <img src={iconChevronRight.toString()} alt="" />
             </a>
         </div>
 

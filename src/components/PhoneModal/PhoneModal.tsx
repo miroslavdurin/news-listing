@@ -2,12 +2,20 @@ import React from 'react';
 import './PhoneModal.scss';
 import iconSearch from "../../assets/icons/icon-search.svg";
 import Navbar from '../Navbar/Navbar';
+import { Categories } from '../../utilities/types';
 
-function PhoneModal({isSmallScreen, handleCategories, handleQuery, category}) {
-    function handleSubmit(e) {
+type PhoneModalProps = {
+    isSmallScreen: boolean;
+    handleCategories: (category: Categories) => void;
+    handleQuery: (query: string) => void;
+    category: Categories;
+}
+
+function PhoneModal({isSmallScreen, handleCategories, handleQuery, category}: PhoneModalProps) {
+    function handleSubmit(e: React.FormEvent<HTMLFormElement>){
         /* Reading input and calling handleQuery function. */
         e.preventDefault();
-        const input = document.querySelector("#input");
+        const input = document.querySelector("#input") as HTMLInputElement;
         if(!input.value) return;
         handleQuery(input.value.trim())
     }

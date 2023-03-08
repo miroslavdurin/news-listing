@@ -1,13 +1,23 @@
-import React from 'react';
+import React, {useState} from 'react';
 import "./Header.scss";
 import iconSearch from "../../assets/icons/icon-search.svg";
 
-function Header({handleQuery}) {    
-    function handleSubmit(e) {
-        e.preventDefault();
-        const input = document.querySelector("#input");
-        if(!input.value) return;
-        handleQuery(input.value.trim())
+type HeaderProps = {
+    handleQuery: (query:string) => void;
+}
+
+function Header({handleQuery}: HeaderProps) {    
+    const [input, setInput] = useState("");
+
+    function handleSubmit(e: React.FormEvent) {
+        e.preventDefault()
+        if(!input) return;
+        handleQuery(input.trim())
+    }
+
+    function handleChange(e: React.ChangeEvent) {
+        const target = e.target as HTMLInputElement;
+        setInput(target.value);
     }
 
     return (
@@ -23,7 +33,7 @@ function Header({handleQuery}) {
                 <label htmlFor='input' className="form__search-icon">
                     <img src={iconSearch} alt="" />                
                 </label>
-                <input id='input' type="text" className="form__input" placeholder="Search news"/>
+                <input onChange={handleChange} type="text" value={input} name="input" className="form__input" placeholder="Search news"/>
                 <button type="submit" className="form__btn-submit">Search</button>
             </form>
         </header>

@@ -3,22 +3,31 @@ import './SingleArticle.scss';
 import iconBookmark from '../../assets/icons/icon-bookmark.svg';
 import placeholderImage from "../../assets/images/placeholder-image.jpg";
 
+import { Article } from '../../utilities/types';
 
-function SingleArticle({url, image, title, category, author, isBookmarked, isAd, isBreakingNews, handleBookmarks}) {
+
+interface SingleArticleProps extends Article {
+  handleBookmarks: (bookmarks: Article)=>void;
+}
+
+function SingleArticle({url, image, title, category, author, isBookmarked, isAd, isBreakingNews, handleBookmarks}: SingleArticleProps) {
   function handleClick(){
     handleBookmarks ({
-      urlToImage: image,
+      image,
       title,
       category,
       author,
       url,
-      isBookmarked: !isBookmarked
+      isBookmarked: !isBookmarked,
+      isAd:false,
+      isBreakingNews: false
     })
   }
 
   function handleOpenLink() {
     /* Opening link on a new page if it isn't ad. */
     !isAd && window.open(url)
+    // TODO change click handler to anchor element
   }
 
   return (    

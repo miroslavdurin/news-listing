@@ -1,7 +1,11 @@
 import React from 'react';
 import "./Banner.scss";
 
-function Banner({handleDisplayBanner}) {
+type BannerProps = {
+    handleDisplayBanner: ()=>void;
+}
+
+function Banner({handleDisplayBanner}: BannerProps) {
     return (
         <div className='banner'>
             <div className="container">
